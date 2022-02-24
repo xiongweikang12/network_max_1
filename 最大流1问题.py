@@ -1,3 +1,5 @@
+import tkinter
+
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
@@ -5,6 +7,7 @@ import pandas as pd
 from ortools.graph import pywrapgraph
 import time
 import tkinter as tk
+from tkinter import messagebox
 
 
 def str_into_list(StringVar):#将Entry中的string isdigit 转换成列表
@@ -37,6 +40,7 @@ capacity_entry.pack()
 flow_entry=tk.Entry(frame_entry)
 flow_entry.pack()
 
+
 def insert():#将填充的entry list return
 
     start_str=start_node_entry.get()
@@ -57,6 +61,12 @@ def insert():#将填充的entry list return
     list_flow=str_into_list(flow_str)
     print(list_flow)
     return list_start_node,list_end_node,list_capacity,list_flow
+
+def clear_entry():
+    start_node_entry.delete(0,tkinter.END)
+    end_node_entry.delete(0,tkinter.END)
+    capacity_entry.delete(0,tkinter.END)
+    flow_entry.delete(0,tkinter.END)
 
 
 
@@ -106,7 +116,21 @@ def read_excel_return():# 传入表路径，返回dataframe
 
 
 def show_content():
-    list_sart_node,list_end_node,list_capacity,list_flow =insert()
+    list_sart_node, list_end_node, list_capacity, list_flow = insert()
+    while True:
+        if len(list_sart_node)==len(list_end_node)==len(list_capacity)==len(list_flow) and len(list_sart_node)>0:
+        #及当entry框内所有的都非空 并且其长度都相等insect成立 break ，否则messagebox提醒，清除entry框，重新输入
+            break
+        else:
+            messagebox.showerror(title='error warning', message='entry is empty or '
+                                 'the lenght of these lists is no equid'
+                                ' check out carafully again and rewrite pleas')
+            quit()
+
+
+
+
+
     if 1==2:
         pass
     else:
@@ -203,8 +227,11 @@ def show_content():
 
 button_show = tk.Button(frame_command, text='启动', command=show_content)#算法程序按钮
 button_show.pack()
-button_clear = tk.Button(frame_command, text='清空', command=quit)
+button_quit = tk.Button(frame_command, text='退出', command=quit)
+button_quit.pack()
+button_clear=tk.Button(frame_command,text='清空',command=clear_entry)
 button_clear.pack()
+
 if __name__ == '__main__':
     window.mainloop()
 
